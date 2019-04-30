@@ -16,6 +16,7 @@ public abstract class NetworkConnection {
 	String dataOne, dataTwo;
 	ArrayList<ClientThread> ct;
 	private int score1,score2;
+	private Dealer mydealer = new Dealer();
 	
 	public NetworkConnection(Consumer<Serializable> callback) {
 		this.callback = callback;
@@ -191,6 +192,8 @@ public abstract class NetworkConnection {
 		private ObjectOutputStream out;
 		private ServerSocket server;
 		
+		
+		
 		public void closess() {
 			try {
 				this.server.close();
@@ -199,9 +202,6 @@ public abstract class NetworkConnection {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
 		
 		
 		public void run() {
@@ -215,6 +215,10 @@ public abstract class NetworkConnection {
 						t1.start();
 						callback.accept("player" + number + " join");
 						number++;
+						Thread.sleep(1000);
+						if(ct.size() == 4) {
+							gameStart();
+						}
 						
 					}
 				} 
@@ -242,9 +246,13 @@ public abstract class NetworkConnection {
 					
 				}
 			}
-					
-		
 		}
+
+
+
+
+
+		
 	}
 	
 	class ClientThread extends Thread{
@@ -252,10 +260,12 @@ public abstract class NetworkConnection {
 		int number;
 		ObjectOutputStream tout;
 		ObjectInputStream tin;
+		Player myplayer;
 		
 		ClientThread(Socket socket, int num){
 			this.s = socket;
 			this.number = num;
+			myplayer = new Player();
 		}
 		public void run() {
 			try(
@@ -266,6 +276,7 @@ public abstract class NetworkConnection {
 				this.tin = in;
 				//System.out.print("here");
 				tout.writeObject("welcome player: "+ number);
+				/*
 				if(number ==1) {
 					tout.writeObject("waiting for another player come in");
 				}
@@ -273,19 +284,13 @@ public abstract class NetworkConnection {
 					tout.writeObject("game start, pick you choich");
 				}
 				
-				
+				*/
 				while(true) {
 					Serializable data = (Serializable) in.readObject();
-					if(number == 1) {
-						clientOne = true;
-						dataOne = data.toString();
-					}
-					else {
-						clientTwo = true;
-						dataTwo = data.toString();
-					}
-					callback.accept("player" + number + "plays: " + data);
+					
+					callback.accept(data);
 				}
+				
 			}
 			catch(Exception e) {
 				callback.accept("connection Closed");
@@ -294,5 +299,22 @@ public abstract class NetworkConnection {
 		
 	}
 	
+	public void gameStart() {
+		System.out.println("hello");
+		mydealer.startGame();
+		System.out.println(mydealer.dealACard().toString());
+		
+		for(int i = 0; i < 4; i++ ) {
+			try {
+				ct.get(i).tout.writeObject("fa ni liang zhang pai");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
 }	
+
 

@@ -114,6 +114,7 @@ public class BJServer extends Application{
 			conn = createServer(i);
 			try {
 				conn.startConn();
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -209,21 +210,6 @@ public class BJServer extends Application{
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -30,7 +30,8 @@ public class Dealer extends Deck{
 		return playerD;
 	}
 	
-	public Card dealACard(int playerHandValue) {
+	public Card dealACard() {
+		/*
 		if(playerHandValue < 21)
 		{
 			Card card = dealerDeck.getNthCard(0);
@@ -41,6 +42,10 @@ public class Dealer extends Deck{
 			System.out.println("Your hand Value is equal or greatter than 21!!!");
 			return null;
 		}
+		*/
+		Card card = dealerDeck.getNthCard(0);
+		dealerDeck.deleteNthCard(0);
+		return card;
 	}
 	
 	public void compare() {
