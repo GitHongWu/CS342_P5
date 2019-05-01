@@ -15,6 +15,8 @@ public abstract class NetworkConnection {
 	boolean clientOne, clientTwo;
 	String dataOne, dataTwo;
 	ArrayList<ClientThread> ct;
+	//the list to store the players who wants to play
+	ArrayList<ClientThread> playable_list;
 	private int score1,score2;
 	private Dealer mydealer = new Dealer();
 	
@@ -216,7 +218,17 @@ public abstract class NetworkConnection {
 						callback.accept("player" + number + " join");
 						number++;
 						Thread.sleep(1000);
-						if(ct.size() == 4) {
+						if (ct.size() >= 4) {
+							for(int i = 0; i < ct.size(); i++ ) {
+								try {
+									ct.get(i).tout.writeObject("There Are " + ct.size() + " Players Online, Do You Want To Start?\n");
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+						if (playable_list.size() >= 4) {
 							gameStart();
 						}
 						
@@ -305,7 +317,7 @@ public abstract class NetworkConnection {
 		for(int i = 0; i < 4; i++ ) {
 			try {
 				card= mydealer.dealACard().toString();
-				ct.get(i).tout.writeObject(card);
+				playable_list.get(i).tout.writeObject(card);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

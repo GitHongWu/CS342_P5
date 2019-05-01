@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -43,8 +45,9 @@ public class BJServer extends Application{
 	
 	//network scene
 	Scene networking;
-	Button startGame;
+	protected Button start_Net;
 	Button btn;
+	Button quit;
 	
 	//game scene
 	Scene game;
@@ -66,14 +69,14 @@ public class BJServer extends Application{
 		exit.setLayoutY(200);
 		
 		
-		//buttons
+		//start btn on the start scene
 		start.setOnAction(new EventHandler<ActionEvent>(){
 			
 			public void handle(ActionEvent event){
-				myStage.setScene(sceneMap.get("network"));
+				myStage.setScene(sceneMap.get("network_s"));
 			}
 		});
-		
+		//exit btn on the start scene
 		exit.setOnAction(e->{
 			primaryStage.close();
 			
@@ -97,17 +100,22 @@ public class BJServer extends Application{
 		
 	//network scene
 		//startGame = new Button("Start");
-		btn = new Button("connect");
+		btn = new Button("Server On");
 		btn.setLayoutX(300);
 		btn.setLayoutY(550);
+		start_Net = new Button("Start Game");
+		quit = new Button("QUIT");
+		quit.setLayoutX(300);
+		quit.setLayoutY(1100);
 		messages = new TextArea();
 		Text textport = new Text("Port:");
 		TextField text = new TextField();
 		
+		HBox game_opt = new HBox(200, btn, start_Net);
+		VBox portbox = new VBox(30, textport, text, game_opt, messages, quit);
+		portbox.setPadding(new Insets(20,10,0,10));
 		
-		VBox portbox = new VBox(10, textport,text, btn,messages);
-		
-		
+		//Server on btn on network scene
 		btn.setOnAction(event->{
 			//System.out.println(text.getText());
 			int i = Integer.parseInt(text.getText());
@@ -119,29 +127,38 @@ public class BJServer extends Application{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("created:" + i);
+			System.out.println("Server Established: " + i + "\n");
+			messages.appendText("Server Established: " + i + "\n");
 			btn.setDisable(true);
 			//myDealer = new Dealer();
 			//myDealer.startGame();
 			//myStage.setScene(sceneMap.get("game"));
-			
-			
-			
+		});
+		
+		//start btn on network scene goes to game scene
+		start_Net.setOnAction (new EventHandler<ActionEvent>() {
+			public void handle (ActionEvent event) {
+				myStage.setScene(sceneMap.get("game_s"));
+				start_Net.setDisable(true);
+			}
+		});
+		
+		//quit btn on network scene
+		quit.setOnAction(event-> {
+			primaryStage.close();
 		});
 		
 		
+		/*
+		//exit btn on the start scene
 		exit = new Button("Exit");
 		exit.setLayoutX(350);
 		exit.setLayoutY(380);
 		
 		exit.setOnAction(e->{
 			primaryStage.close();
-			
 		});
 		
-		
-		
-		/*
 		startGame.setOnAction(new EventHandler<ActionEvent>(){
 			
 			public void handle(ActionEvent event){
@@ -188,11 +205,11 @@ public class BJServer extends Application{
 		
 		
 		//map
-		sceneMap.put("w", scene);
-		sceneMap.put("network", networking);
-		sceneMap.put("game", game);
+		sceneMap.put("start_s", scene);
+		sceneMap.put("network_s", networking);
+		sceneMap.put("game_s", game);
 		
-		primaryStage.setScene(sceneMap.get("w"));
+		primaryStage.setScene(sceneMap.get("start_s"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		

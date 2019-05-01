@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -67,7 +69,7 @@ public class BJClient extends Application{
 		start.setOnAction(new EventHandler<ActionEvent>(){
 			
 			public void handle(ActionEvent event){
-				myStage.setScene(sceneMap.get("network"));
+				myStage.setScene(sceneMap.get("network_sc"));
 			}
 		});
 		
@@ -94,24 +96,32 @@ public class BJClient extends Application{
 		
 	//network scene
 		startGame = new Button("Start");
-		startGame.setLayoutX(300);
-		startGame.setLayoutY(550);
+		//startGame.setLayoutX(300);
+		//startGame.setLayoutY(550);
 		
 		
 		messages.setPrefHeight(200);
 		//TextField input = new TextField();
 		
-		Text textport = new Text("Port:");
+		Text textport = new Text("Port: ");
 		TextField portinput = new TextField();
 		Text textip = new Text("IP: ");
 		TextField ipinput = new TextField();
-		Button btn = new Button("Connet");
+		Button btn = new Button("Connect");
+		exit = new Button("Exit");
+		//exit.setLayoutX(350);
+		//exit.setLayoutY(380);
 		
 		
 		btn.setOnAction(event->{
 			System.out.println("conneting..");
 			System.out.println("port: "+ portinput.getText());
 			System.out.println("ip: "+ ipinput.getText());
+			messages.appendText("////////////////////\n");
+			messages.appendText("Conneting..\n");
+			messages.appendText("Port: " + portinput.getText() + "\n");
+			messages.appendText("Ip: " + ipinput.getText() + "\n");
+			messages.appendText("////////////////////\n");
 			int porti = Integer.parseInt(portinput.getText());
 			
 			String address = ipinput.getText();
@@ -131,22 +141,18 @@ public class BJClient extends Application{
 				
 		});
 		
-		
-		exit = new Button("Exit");
-		exit.setLayoutX(350);
-		exit.setLayoutY(380);
-		
 		exit.setOnAction(e->{
 			primaryStage.close();
 			
 		});
 		
-		
-		VBox box = new VBox(20, messages,textport,portinput,textip,ipinput,btn);
+		HBox opts = new HBox (380, btn, exit);
+		VBox box = new VBox (20, messages, textport, portinput, textip, ipinput, opts);
+		box.setPadding(new Insets(40, 20, 20, 20));
 		//set group
 		Group network = new Group();
-		networking = new Scene(network,400,500);
-		network.getChildren().addAll(box,exit);
+		networking = new Scene(network,520,500);
+		network.getChildren().addAll(box);
 		
 		
 		
@@ -177,11 +183,11 @@ public class BJClient extends Application{
 		
 		
 		//map
-		sceneMap.put("w", scene);
-		sceneMap.put("network", networking);
-		sceneMap.put("game", game);
+		sceneMap.put("start_sc", scene);
+		sceneMap.put("network_sc", networking);
+		sceneMap.put("game_sc", game);
 		
-		primaryStage.setScene(sceneMap.get("w"));
+		primaryStage.setScene(sceneMap.get("start_sc"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
