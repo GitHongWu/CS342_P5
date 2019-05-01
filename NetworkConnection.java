@@ -300,13 +300,12 @@ public abstract class NetworkConnection {
 	}
 	
 	public void gameStart() {
-		System.out.println("hello");
 		mydealer.startGame();
-		System.out.println(mydealer.dealACard().toString());
-		
+		String card;
 		for(int i = 0; i < 4; i++ ) {
 			try {
-				ct.get(i).tout.writeObject("fa ni liang zhang pai");
+				card= mydealer.dealACard().toString();
+				ct.get(i).tout.writeObject(card);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
